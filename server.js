@@ -7,7 +7,7 @@ const server = http.createServer((request, response) => {
     buffer += chunk;
   });
   request.on('end', () => {
-    const responseString = `±¸±Û API·Î º¯È¯µÈ ÅØ½ºÆ® : ${buffer}`;
+    const responseString = `Google APIë¥¼ ì‚¬ìš©í•˜ì—¬ ë³€í™˜ëœ ë¬¸ìì—´ : ${buffer}`;
     
     console.log(`${responseString}`);
     response.writeHead(200, "Content-Type: text/plain");
