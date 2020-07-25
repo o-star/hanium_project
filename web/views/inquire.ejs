@@ -1,72 +1,14 @@
-
 <!doctype html>
 <html lang="en">
-  <head>
-    <title>해상교통관제시스템 &mdash; 공대구호관</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <% var result = 0; %>
+
+
+  <%- include('./partials/head.ejs')%>
     
-    
-    <link rel="stylesheet" href="css/custom-bs.css">
-    <link rel="stylesheet" href="css/jquery.fancybox.min.css">
-    <link rel="stylesheet" href="css/bootstrap-select.min.css">
-    <link rel="stylesheet" href="fonts/icomoon/style.css">
-    <link rel="stylesheet" href="fonts/line-icons/style.css">
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-    <link rel="stylesheet" href="css/animate.min.css">
-    <link rel="stylesheet" href="css/quill.snow.css">
-    
+  <!-- NAVBAR -->
+  <%- include('./partials/navybar.ejs')%>
 
-    <!-- MAIN CSS -->
-    <link rel="stylesheet" href="css/style.css">    
-  </head>
-  <body id="top">
-
-  <div id="overlayer"></div>
-  <div class="loader">
-    <div class="spinner-border text-primary" role="status">
-      <span class="sr-only">Loading...</span>
-    </div>
-  </div>
-    
-
-<div class="site-wrap">
-
-    <div class="site-mobile-menu site-navbar-target">
-      <div class="site-mobile-menu-header">
-        <div class="site-mobile-menu-close mt-3">
-          <span class="icon-close2 js-menu-toggle"></span>
-        </div>
-      </div>
-      <div class="site-mobile-menu-body"></div>
-    </div> <!-- .site-mobile-menu -->
-    
-
-    <!-- NAVBAR -->
-    <header class="site-navbar mt-3">
-      <div class="container-fluid">
-        <div class="row align-items-center">
-          <div class="site-logo col-6" style="font-weight: bolder;"><a href="index.html">해상교통관제 시스템</a></div>
-
-          <nav class="mx-auto site-navigation">
-            <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
-              <li><a href="index.html" class="nav-link active">Home</a></li>
-              <li><a href="관제기록 조회.html" class="nav-link active">관제기록 조회</a></li>
-              <li><a href="실시간 관제.html" class="nav-link active">실시간 관제</a></li>
-            </ul>
-          </nav>
-          
-          <div class="right-cta-menu text-right d-flex aligin-items-center col-6">
-            <div class="ml-auto">
-              <!--<a href="post-job.html" class="btn btn-outline-white border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-add"></span>Post a Job</a>-->
-              <a href="login.html" class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Log In</a>
-            </div>
-            <a href="#" class="site-menu-toggle js-menu-toggle d-inline-block d-xl-none mt-lg-2 ml-3"><span class="icon-menu h3 m-0 p-0 mt-2"></span></a>
-          </div>
-
-        </div>
-      </div>
-    </header>
 
     <!-- HOME -->
   <section class="section-hero home-section overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
@@ -78,28 +20,28 @@
             <h1 class="text-white font-weight-bold">조회할 정보들의 옵션을 선택하세요</h1>
             <p>Select an option for information to search</p>
           </div>
-          <form method="post" class="search-jobs-form">
+          <form action="/inquire" method="post" class="search-jobs-form">
             <div class="row mb-5">
               <div class="col-12 col-sm-3 col-md-2 mb-2">
-                <input type="text" class="form-control form-control-lg" placeholder="선박명...">
+                <input type="text" class="form-control form-control-lg" name="shipName" placeholder="선박명...">
               </div>
               <div class="col-12 col-sm-3 col-md-2 mb-2">
-                <select class="selectpicker" data-style="btn-white btn-lg" data-width="100%" data-live-search="true" title="입항/출항 선택">
+                <select class="selectpicker" data-style="btn-white btn-lg" data-width="100%" name="portEntry" data-live-search="true" title="입항/출항 선택">
                   <option>입항여부</option>
                   <option>출항여부</option>
                 </select>
               </div>
               <div class="col-12 col-sm-3 col-md-2 mb-2">
-                <input type="text" class="form-control form-control-lg datePicker" placeholder="조회시작날짜">
+                <input type="text" class="form-control form-control-lg datePicker" name="startDate" placeholder="조회시작날짜">
               </div>
               <div class="col-12 col-sm-3 col-md-2 mb-2">
-                <input type="text" class="form-control form-control-lg timepicker" placeholder="조회시작시간">
+                <input type="text" class="form-control form-control-lg timepicker" name="startHour" placeholder="조회시작시간">
               </div>
               <div class="col-12 col-sm-3 col-md-2 mb-2">
-                <input type="text" class="form-control form-control-lg datePicker" placeholder="조회 끝날짜">
+                <input type="text" class="form-control form-control-lg datePicker" name="EndDate" placeholder="조회 끝날짜">
               </div>
               <div class="col-12 col-sm-3 col-md-2 mb-2">
-                <input type="text" class="form-control form-control-lg timepicker" placeholder="조회 끝시간">
+                <input type="text" class="form-control form-control-lg timepicker" name="EndHour" placeholder="조회 끝시간">
               </div>
               <div class="col-12 col-sm-6 col-md-6 mb-4" style="float:none; margin: 0 auto;">
                 <br/>
@@ -122,7 +64,7 @@
 
         <div class="row mb-5 justify-content-center">
           <div class="col-md-7 text-center">
-            <h2 class="section-title mb-2">43,167 Search Listed</h2>
+            <h2 class="section-title mb-2"><%=result+" Search listed "%></h2>
           </div>
         </div>
         
@@ -144,6 +86,11 @@
               </div>
             </div>
           </li>
+
+
+          <!-- 여기서 부터 함수 만들어서 조회결과를 search 해서 출력 시킨다..-->
+
+          
 
           <li class="job-listing d-block d-sm-flex pb-2 pb-sm-0 align-items-center">
             <div class="job-listing-position custom-width w-25 mb-3 mb-sm-0">
@@ -290,3 +237,9 @@
      
   </body>
 </html>
+
+
+
+<!-- 해야될 것들...  선박명 입항 /출항 선택 및 조회시작 날짜 등 선택 후 조회를 눌렸을 때  밑에 결과가 뜨게 해야 한다.
+  선박명 입항 등 어느 하나라도 입력하지 않았으면 그것을 입력해달라고 alert 시킨다.
+-->
