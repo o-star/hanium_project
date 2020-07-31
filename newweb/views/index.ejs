@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+
+<%- include('./partials/head.ejs')%>
+
+<!-- NAVBAR -->
+<%- include('./partials/navybar.ejs')%>
+
+<!-- HOME -->
+<section class="home-section section-hero overlay bg-image" style="background-image: url('images/hero_1.jpg');"
+  id="home-section">
+
+  <div class="container">
+    <div class="row align-items-center justify-content-center">
+      <div class="col-md-12">
+        <div class="mb-5 text-center">
+          <h1 class="text-white font-weight-bold">스마트해상물류 &nbsp;X&nbsp; ICT멘토링</h1>
+          <p></br>본 시스템은 관제사들이 관제 내용을 수기로 작성하지 않고 시스템을 활용해 관제 내용의
+            확인과 조회만을 담당할 수 있도록 </br> 번거로움을 줄이고 관제 업무의 능률을 향상시키고자 한다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a href="#next" class="scroll-button smoothscroll">
+    <span class=" icon-keyboard_arrow_down"></span>
+  </a>
+
+</section>
+
+<section class="py-5 bg-image overlay-primary fixed overlay" id="next"
+  style="background-image: url('images/hero_1.jpg');">
+  <div class="container">
+    <div class="row mb-5 justify-content-center">
+      <div class="col-md-7 text-center">
+        <h2 class="section-title mb-2 text-white">해상 교통관제 통계</h2>
+      </div>
+    </div>
+    <div class="row pb-0 block__19738 section-counter">
+
+      <div class="col-6 col-md-6 col-lg-3 mb-5 mb-lg-0">
+        <div class="d-flex align-items-center justify-content-center mb-2">
+          <strong class="number" data-number="1930">0</strong>
+        </div>
+        <span class="caption">올해 교통관제량</span>
+      </div>
+
+      <div class="col-6 col-md-6 col-lg-3 mb-5 mb-lg-0">
+        <div class="d-flex align-items-center justify-content-center mb-2">
+          <strong class="number" data-number="550">0</strong>
+        </div>
+        <span class="caption">당월 교통 관제량</span>
+      </div>
+
+      <div class="col-6 col-md-6 col-lg-3 mb-5 mb-lg-0">
+        <div class="d-flex align-items-center justify-content-center mb-2">
+          <strong class="number" data-number="120">0</strong>
+        </div>
+        <span class="caption">금주 교통 관제량</span>
+      </div>
+
+      <div class="col-6 col-md-6 col-lg-3 mb-5 mb-lg-0">
+        <div class="d-flex align-items-center justify-content-center mb-2">
+          <strong class="number" data-number="34">0</strong>
+        </div>
+        <span class="caption">금일 교통 관제량</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('./partials/footer.ejs')%>
+</body>
+
+</html>

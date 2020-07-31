@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+
+<%- include('./partials/head.ejs')%>
+
+<!-- NAVBAR -->
+<%- include('./partials/navybar.ejs')%>
+
+<script src="./js/jquery.min.js"></script>
+<script type="text/javascript" src="./views/partials/file.js"></script>
+
+<!-- HOME -->
+<section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');"
+  id="home-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-7">
+        <h1 class="text-white font-weight-bold">실시간 관제</h1>
+        <div class="custom-breadcrumbs">
+          <span class="text-white"><strong>&nbsp;울산항만공사</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="site-section" id="next">
+  <div class="container">
+
+    <div class="row mb-5 justify-content-center">
+      <div class="col-md-7 text-center">
+        <h2 class="section-title mb-2">관제 정보 추가</h2>
+      </div>
+    </div>
+
+    <div>
+      <div class="text-center">
+        <input type="button" name="record" value="record" />
+        <input type="button" name="stop" value="stop" />
+      </div>
+      <p></p>
+    </div>
+
+    <table class="text-center table-class" style="width: 100%">
+      <tr style="height: 50px; font-weight: bold; font-size:15px; border:black solid">
+        <td style="width:14%">선박명</td>
+        <td style="width:14%">톤 수</td>
+        <td style="width:14%">입/출항</td>
+        <td style="width:14%">외/내항</td>
+        <td style="width:14%">날 짜</td>
+        <td style="width:14%">시 간</td>
+        <td style="width:16%">확 인</td>
+      </tr>
+      <%
+      var obj_length = Object.keys(records).length;
+      var arr = [];
+      for(i=0;i<obj_length;i++) { %>
+      <tr style="border: black solid" class="tr-class"></tr>
+      <td style="width:14%" class="td-class"><%- records[i].ship_name %></td>
+      <td style="width:14%" class="td-class"><%- records[i].weight_ton %></td>
+      <td style="width:14%" class="td-class"><%- records[i].ship_direction %></td>
+      <td style="width:14%" class="td-class"><%- records[i].port_position %></td>
+      <td style="width:14%" class="td-class"><%- records[i].date %></td>
+      <td style="width:14%" class="td-class"><%- records[i].time %></td>
+      <td style="width:16%" class="check-class">
+        <div style="padding-top:10px">
+          <% var newname = 'check'+i %>
+          <a href="add/<%-records[i].id%>">승인</a>
+          <a href="delete/<%-records[i].id%>">삭제</a>
+        </div>
+      </td>
+      </tr>
+      <%}%>
+  </table>
+  </div>
+</section>
+
+<%- include('./partials/footer.ejs')%>
+</body>
+
+</html>
