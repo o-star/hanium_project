@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+
+<% var result = 0; %>
+
+
+<%- include('./partials/head.ejs')%>
+
+<!-- NAVBAR -->
+<%- include('./partials/navybar.ejs')%>
+
+
+<!-- HOME -->
+<section class="section-hero home-section overlay inner-page bg-image"
+  style="background-image: url('images/hero_1.jpg');" id="home-section">
+
+  <div class="container">
+    <div class="row align-items-center justify-content-center">
+      <div class="col-md-12">
+        <div class="mb-5 text-center">
+          <h1 class="text-white font-weight-bold">조회할 정보들의 옵션을 선택하세요</h1>
+          <p>Select an option for information to search</p>
+        </div>
+        <form action="/inquire" method="post" class="search-jobs-form">
+          <div class="row mb-5">
+            <div class="col-12 col-sm-3 col-md-2 mb-2">
+              <input type="text" class="form-control form-control-lg" name="shipName" placeholder="선박명...">
+            </div>
+            <div class="col-12 col-sm-3 col-md-2 mb-2">
+              <select class="selectpicker" data-style="btn-white btn-lg" data-width="100%" name="portEntry"
+                data-live-search="true" title="입항/출항 선택">
+                <option>입항여부</option>
+                <option>출항여부</option>
+              </select>
+            </div>
+            <div class="col-12 col-sm-3 col-md-2 mb-2">
+              <input type="text" class="form-control form-control-lg datePicker" name="startDate" placeholder="조회시작날짜">
+            </div>
+            <div class="col-12 col-sm-3 col-md-2 mb-2">
+              <input type="text" class="form-control form-control-lg timepicker" name="startHour" placeholder="조회시작시간">
+            </div>
+            <div class="col-12 col-sm-3 col-md-2 mb-2">
+              <input type="text" class="form-control form-control-lg datePicker" name="EndDate" placeholder="조회 끝날짜">
+            </div>
+            <div class="col-12 col-sm-3 col-md-2 mb-2">
+              <input type="text" class="form-control form-control-lg timepicker" name="EndHour" placeholder="조회 끝시간">
+            </div>
+            <div class="col-12 col-sm-6 col-md-6 mb-4" style="float:none; margin: 0 auto;">
+              <br />
+              <button type="submit" class="btn btn-primary btn-lg btn-block text-white btn-search"><span
+                  class="icon-search icon mr-2"></span>조회</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <a href="#next" class="scroll-button smoothscroll">
+    <span class=" icon-keyboard_arrow_down"></span>
+  </a>
+</section>
+
+
+<section class="site-section" id="next">
+  <div class="container">
+
+    <div class="row mb-5 justify-content-center">
+      <div class="col-md-7 text-center">
+        <h2 class="section-title mb-2"><%=result+" Search listed "%></h2>
+      </div>
+    </div>
+
+    <ul class="job-listings mb-5">
+      <li class="job-listing d-block d-sm-flex pb-3 pb-sm-3">
+        <div class="job-listing-position custom-width w-25 mb-3 mb-sm-0">
+          <h2 class="listing_font_style">입/출항</h2>
+        </div>
+
+        <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
+          <div class="job-listing-position mb-3 mb-sm-0 custom-width w-25">
+            <h2 class="listing_font_style">선박명</h2>
+          </div>
+          <div class="job-listing-position ">
+            <h2 class="listing_font_style">입/출항 시간</h2>
+          </div>
+          <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
+            <h2 class="listing_font_style">특이사항</h2>
+          </div>
+        </div>
+      </li>
+
+
+      <!-- 여기서 부터 함수 만들어서 조회결과를 search 해서 출력 시킨다..-->
+
+
+
+      <li class="job-listing d-block d-sm-flex pb-2 pb-sm-0 align-items-center">
+        <div class="job-listing-position custom-width w-25 mb-3 mb-sm-0">
+          <h2 class="listing_font_style2">입항</h2>
+        </div>
+
+        <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
+          <div class="job-listing-position mb-3 mb-sm-0 custom-width w-25">
+            <h2 class="listing_font_style2">온누리호</h2>
+          </div>
+          <div class="job-listing-position ">
+            <h2 class="listing_font_style2">07 : 25</h2>
+          </div>
+          <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
+            <h2 class="listing_font_style2">없음</h2>
+          </div>
+        </div>
+      </li>
+
+      <li class="job-listing d-block d-sm-flex pb-2 pb-sm-0 align-items-center">
+        <div class="job-listing-position custom-width w-25 mb-3 mb-sm-0">
+          <h2 class="listing_font_style2">입항</h2>
+        </div>
+
+        <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
+          <div class="job-listing-position mb-3 mb-sm-0 custom-width w-25">
+            <h2 class="listing_font_style2">마우리호</h2>
+          </div>
+          <div class="job-listing-position ">
+            <h2 class="listing_font_style2">09 : 00</h2>
+          </div>
+          <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
+            <h2 class="listing_font_style2">없음</h2>
+          </div>
+        </div>
+      </li>
+
+      <li class="job-listing d-block d-sm-flex pb-2 pb-sm-0 align-items-center">
+        <div class="job-listing-position custom-width w-25 mb-3 mb-sm-0">
+          <h2 class="listing_font_style2">입항</h2>
+        </div>
+
+        <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
+          <div class="job-listing-position mb-3 mb-sm-0 custom-width w-25">
+            <h2 class="listing_font_style2">효동호</h2>
+          </div>
+          <div class="job-listing-position ">
+            <h2 class="listing_font_style2">13 : 55</h2>
+          </div>
+          <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
+            <h2 class="listing_font_style2">없음</h2>
+          </div>
+        </div>
+      </li>
+
+      <li class="job-listing d-block d-sm-flex pb-2 pb-sm-0 align-items-center">
+        <div class="job-listing-position custom-width w-25 mb-3 mb-sm-0">
+          <h2 class="listing_font_style2">출항</h2>
+        </div>
+
+        <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
+          <div class="job-listing-position mb-3 mb-sm-0 custom-width w-25">
+            <h2 class="listing_font_style2">온누리호</h2>
+          </div>
+          <div class="job-listing-position ">
+            <h2 class="listing_font_style2">23 : 25</h2>
+          </div>
+          <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
+            <h2 class="listing_font_style2">없음</h2>
+          </div>
+        </div>
+      </li>
+
+    </ul>
+
+    <div class="row pagination-wrap">
+      <div class="col-md-6 text-center text-md-left mb-4 mb-md-0">
+        <span>Showing 1-7 Of 43,167 Jobs</span>
+      </div>
+      <div class="col-md-6 text-center text-md-right">
+        <div class="custom-pagination ml-auto">
+          <a href="#" class="prev">Prev</a>
+          <div class="d-inline-block">
+            <a href="#" class="active">1</a>
+            <a href="#">2</a>
+            <a href="#">3</a>
+            <a href="#">4</a>
+          </div>
+          <a href="#" class="next">Next</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('./partials/footer.ejs')%>
+</body>
+
+</html>
+
+
+
+<!-- 해야될 것들...  선박명 입항 /출항 선택 및 조회시작 날짜 등 선택 후 조회를 눌렸을 때  밑에 결과가 뜨게 해야 한다.
+  선박명 입항 등 어느 하나라도 입력하지 않았으면 그것을 입력해달라고 alert 시킨다.
+-->
