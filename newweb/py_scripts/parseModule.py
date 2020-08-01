@@ -122,10 +122,10 @@ def findShipWeight(keywords):  # 총톤수 확인
                 answerDic['총톤수'] = str(ans) + '톤';
 
 def __main__():
-    texts = ["선박명 온두리호 총톤수는 육백삼십이톤이며 이천이십년 팔월 십오일 십삼시 오십분에 울산 외항으로 입항할 예정이다"]
+    #texts = ["선박명 온두리호 총톤수는 육백삼십이톤이며 이천이십년 팔월 십오일 십삼시 오십분에 울산 외항으로 입항할 예정이다"]
     texts = [normalize(text, english=False, number=False) for text in texts]
     # texts 전처리 영어 미포함, 숫자 미포함 설정
-    answerDic = {}
+
     keywords = krWordRankFunc(texts);
 
     findInOut(keywords)  # 입/출항 추출 함수
@@ -134,7 +134,7 @@ def __main__():
     findTime(keywords)  # 시간 데이터 추출함수
     findShipName(keywords, texts)  # 선박명 추출함수
     findShipWeight(keywords)  # 총톤수 추출함수
-
+    print(answerDic)
 
 if __name__ == '__main__':
     __main__()
