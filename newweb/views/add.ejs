@@ -53,7 +53,7 @@
       </tr>
       <%
       var obj_length = Object.keys(records).length;
-      var arr = [];
+    
       for(i=0;i<obj_length;i++) { %>
       <tr style="border: black solid" class="tr-class"></tr>
       <td style="width:14%" class="td-class"><%- records[i].ship_name %></td>
@@ -63,10 +63,12 @@
       <td style="width:14%" class="td-class"><%- records[i].date %></td>
       <td style="width:14%" class="td-class"><%- records[i].time %></td>
       <td style="width:16%" class="check-class">
-        <div style="padding-top:10px">
+        <div>
           <% var newname = 'check'+i %>
-          <a href="add/<%-records[i].id%>">승인</a>
-          <a href="delete/<%-records[i].id%>">삭제</a>
+          <input type="button" style = "background-color: red; border:none; margin-right: 10px; font-weight:bold" 
+          onclick="location.href='add/<%-records[i].id%>';" value = "승인">
+          <input type="button" style = "background-color: greenyellow; border:none; font-weight:bold" 
+          onclick="location.href='delete/<%-records[i].id%>';" value = "삭제">
         </div>
       </td>
       </tr>
