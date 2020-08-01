@@ -1,3 +1,12 @@
+const { PythonShell } = require("python-shell");
+const path = require('path');
+const { response } = require("express");
+const pypath = path.join(__dirname, "/py_scripts");
+let options = {
+    scriptPath: pypath,
+    args :[]
+};
+
 module.exports = function () {
     var route = require('express').Router();
     var conn = require('../../config/mysql/db')();
@@ -77,7 +86,18 @@ module.exports = function () {
         });
 
     });
-
+    route.get('/record', function(req, res){
+        PythonShell.run("sound_recorder.py", options, function(err, data){
+            if(err) throw err;
+            //res.status(200).json({data: JSON.parse(data), success: true});
+            console.log("음성 녹음완료 : " + data);
+        });
+        PythonShell.run("stt-parse.py", options, function(err, data){
+            if(err) throw err;
+            //res.status(200).json({data: JSON.parse(data), success: true});
+            console.log("음성파일 파싱완료 : " + data);
+        });
+    })
 
     route.get('/add', function (req, res) {
         var sql = 'SELECT * FROM temp';
