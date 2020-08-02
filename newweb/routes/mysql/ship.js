@@ -37,6 +37,7 @@ module.exports = function () {
             
 
             if(shipname){
+                console.log(shipname);
                 results=results.filter(function(curRow){
                     return curRow.ship_name==shipname;
                 })
@@ -49,12 +50,14 @@ module.exports = function () {
             }
 
             if(startdate){
+                console.log(startdate);
                 results=results.filter(function(curRow){
                     return curRow.date>=startdate;
                 })
             }
         
             if(starthour){
+                console.log(starthour);
                 results=results.filter(function(curRow){
                     return curRow.time>=startHour;
                 })
