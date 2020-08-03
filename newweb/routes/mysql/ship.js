@@ -1,12 +1,3 @@
-const { PythonShell } = require("python-shell");
-const path = require('path');
-const { response } = require("express");
-const pypath = path.join(__dirname, "/py_scripts");
-let options = {
-    scriptPath: pypath,
-    args :[]
-};
-
 module.exports = function () {
     var route = require('express').Router();
     var conn = require('../../config/mysql/db')();
@@ -32,53 +23,121 @@ module.exports = function () {
 
     route.post('/inquire',function(req,res){
         var sql = 'SELECT * FROM record';
+
+        var input={
         
-        var shipname=req.body.shipName;
-        var entry=req.body.portEntry;
-        var startdate=req.body.startDate;
-        var starthour=req.body.startHour;
-        var enddate=req.body.endDate;
-        var endhour=req.body.endHour;
+            shipname:req.body.shipName,
+            entry:req.body.portEntry,
+             startdate:req.body.startDate,
+            starthour:req.body.startHour,
+            enddate:req.body.endDate,
+            endhour:req.body.endHour
+        };
 
-        conn.query(sql,function(err,fileds){
+        conn.query(sql,function(err,fields){
             
-            var results=fileds;
+            var results=fields;
+
+            function dateBiggerCheck(curRow){
+                var dbArray=curRow.date.split('-'); // DB값
+                var inputArray=input.startdate.split('-'); // 조회입력값
+
+               // 2020- 05-06 , 2020-05-12
+
+               for(var i=0;i<inputArray.length;i++){
+                   if(inputArray[i]<dbArray[i])
+                        return true;
+                    else if(inputArray[i]==dbArray[i])
+                        continue;
+                    else
+                        return false;
+               }
+                return true;
+            
+              }
+            
+            
+            
+            function dateSmallerCheck(curRow){
+               
+                var dbArray=curRow.date.split('-'); 
+                var inputArray=input.enddate.split('-'); 
+                
+                for(var i=0;i<inputArray.length;i++){
+                    if(inputArray[i]>dbArray[i])
+                         return true;
+                    else if(inputArray[i]==dbArray[i])
+                        continue;
+                    else
+                        return false;
+                }
+
+                return true;
+            
+            }
+
+                
+
+            function hourBiggerCheck(curRow){
+                var dbArray=curRow.time.split(':');
+                var inputArray=input.starthour.split(':');
+
+                for(var i=0;i<inputArray.length;i++){
+                    if(inputArray[i]<dbArray[i])
+                         return true;
+                     else if(inputArray[i]==dbArray[i])
+                         continue;
+                     else
+                         return false;
+                }
+                 return true;
+                
+            }
+
+            function hourSmallerCheck(curRow){
+
+                var dbArray=curRow.time.split(':');
+                var inputArray=input.endhour.split(':');
+
+                for(var i=0;i<inputArray.length;i++){
+                    if(inputArray[i]>dbArray[i])
+                         return true;
+                    else if(inputArray[i]==dbArray[i])
+                        continue;
+                    else
+                        return false;
+                }
+
+                return true;
+            }
             
 
-            if(shipname){
+            if(input.shipname){
                 results=results.filter(function(curRow){
-                    return curRow.ship_name==shipname;
+                    return curRow.ship_name==input.shipname;
                 })
             }
 
-            if(entry){
+            if(input.entry){
                 results=results.filter(function(curRow){
-                    return curRow.ship_direction==entry;
+                    return curRow.ship_direction==input.entry;
                 })
             }
 
-            if(startdate){
-                results=results.filter(function(curRow){
-                    return curRow.date>=startdate;
-                })
+            if(input.startdate){
+                results=results.filter(dateBiggerCheck);
             }
         
-            if(starthour){
-                results=results.filter(function(curRow){
-                    return curRow.time>=startHour;
-                })
+            if(input.starthour){
+                results=results.filter(hourBiggerCheck);
             }
 
-            if(enddate){
-                results=results.filter(function(curRow){
-                    return curRow.date<=enddate;
-                })
+            if(input.enddate){
+                results=results.filter(dateSmallerCheck);
             }
 
-            if(endhour){
-                results=results.filter(function(curRow){
-                    return curRow.time<=endhour;
-                })
+            if(input.endhour){
+                results=results.filter(hourSmallerCheck);
             }
 
         
@@ -86,18 +145,7 @@ module.exports = function () {
         });
 
     });
-    route.get('/record', function(req, res){
-        PythonShell.run("sound_recorder.py", options, function(err, data){
-            if(err) throw err;
-            //res.status(200).json({data: JSON.parse(data), success: true});
-            console.log("음성 녹음완료 : " + data);
-        });
-        PythonShell.run("stt-parse.py", options, function(err, data){
-            if(err) throw err;
-            //res.status(200).json({data: JSON.parse(data), success: true});
-            console.log("음성파일 파싱완료 : " + data);
-        });
-    })
+
 
     route.get('/add', function (req, res) {
         var sql = 'SELECT * FROM temp';

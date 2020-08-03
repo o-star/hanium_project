@@ -82,11 +82,11 @@
       </tr>
 
 
-      <!-- 여기서 부터 함수 만들어서 조회결과를 search 해서 출력 시킨다..-->
+      
 
       <%
       for(i=0;i<resultCnt;i++) { %>
-      <tr style="border: black solid" class="tr-class"></tr>
+      <tr class="tr-class">
       <td style="width:14%" class="td-class"><%- results[i].ship_name %></td>
       <td style="width:14%" class="td-class"><%- results[i].weight_ton %></td>
       <td style="width:14%" class="td-class"><%- results[i].ship_direction %></td>
@@ -95,7 +95,8 @@
       <td style="width:14%" class="td-class"><%- results[i].time %></td>
       </tr>
       <%}%>
-
+    </table>
+    <p></p>
     <div class="row pagination-wrap">
       <div class="col-md-6 text-center text-md-left mb-4 mb-md-0">
         <span>Showing 1-7 Of 43,167 Jobs</span>
@@ -120,9 +121,3 @@
 </body>
 
 </html>
-
-
-
-<!-- 해야될 것들...  선박명 입항 /출항 선택 및 조회시작 날짜 등 선택 후 조회를 눌렸을 때  밑에 결과가 뜨게 해야 한다.
-  선박명 입항 등 어느 하나라도 입력하지 않았으면 그것을 입력해달라고 alert 시킨다.
--->
