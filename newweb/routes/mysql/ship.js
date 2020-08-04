@@ -2,6 +2,15 @@ module.exports = function () {
     var route = require('express').Router();
     var conn = require('../../config/mysql/db')();
     var bodyParser = require('body-parser');
+    const { PythonShell } = require("python-shell");
+    const path = require('path');
+    const { response } = require("express");
+    const pypath = path.join(__dirname, "../../py_scripts");
+    let options = {
+        scriptPath: pypath,
+        args: ["선박명", "총톤수", "입/출항", "외/내항", "날짜", "시간"]
+    };
+
 
     route.use(bodyParser.urlencoded({extended : true}));
 
@@ -145,7 +154,30 @@ module.exports = function () {
         });
 
     });
+    route.get('/record', function(req, res){
+        console.log("test" + pypath);
+        PythonShell.run("stt-parse.py", options, function(err, data){
+            if(err) throw err;
+            //res.status(200).json({data: JSON.parse(data), success: true});
+            var value = data[3].split(' ');
+            var sql =
+                ` 
+                INSERT INTO temp (ship_name, weight_ton, ship_direction, port_position, date, time) 
+                VALUES ("${value[0]}", ${value[1]}, "${value[2]}", "${value[3]}", "${value[4]}", "${value[5]}"); 
+                `;
 
+            console.log(value);
+            conn.query(sql, function (err, result) {
+            if (err) {
+                console.log(err);
+                res.status(500).send('Internal Server Error');
+            }   else{
+                console.log("Number of records inserted: " + result.rowsAffected);
+                res.redirect('/add');
+            }
+            });
+        });
+    })
 
     route.get('/add', function (req, res) {
         var sql = 'SELECT * FROM temp';
