@@ -22,6 +22,6 @@ CREATE TABLE `temp`(`id` int NOT NULL AUTO_INCREMENT PRIMARY KEY, `ship_name` va
 이후 record 테이블로 추가/삭제 가능
 
 <h4>가상환경 구축 방법</h4>
-1. bash venv_installation.sh
-2. source venv/bin/activate
-3. pip install -r requirements.txt
+1. bash venv_installation.sh <br>
+2. source venv/bin/activate <br>
+3. pip install -r requirements.txt <br>
