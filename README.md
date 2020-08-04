@@ -16,3 +16,12 @@ CREATE TABLE `record`(`id` int NOT NULL AUTO_INCREMENT PRIMARY KEY, `ship_name` 
 CREATE TABLE `temp`(`id` int NOT NULL AUTO_INCREMENT PRIMARY KEY, `ship_name` varchar(100) NOT NULL, `weight_ton` double NOT NULL, `ship_direction` varchar(30) NOT NULL, `port_position` varchar(30) NOT NULL, `date` varchar(30) NOT NULL, `time` varchar(30) NOT NULL);
 
 5. supervisor main.js해서 실행하기.
+
+###08/03
+음성파일 텍스트로 변환 및 관제 정보 파싱 후 임시 테이블 temp에 저장하는 기능 추가.
+이후 record 테이블로 추가/삭제 가능
+
+<h4>가상환경 구축 방법</h4>
+1. bash venv_installation.sh
+2. source venv/bin/activate
+3. pip install -r requirements.txt
