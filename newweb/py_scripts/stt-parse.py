@@ -4,8 +4,8 @@ from google.cloud.speech_v1 import enums
 
 import io
 import os
-from . import parseModule as pm
-
+import parseModule as pm
+import sys
 
 def sample_recognize():
 
@@ -34,26 +34,26 @@ def sample_recognize():
 
         "encoding": encoding,
     }
-    file_name = os.path.join(
-        os.path.dirname(__file__),
-        '.',
-        'file.wav'
-    )
-    with io.open(file_name, "rb") as audio_file:
-        content = audio_file.read()
+    # file_name = os.path.join(
+    #     os.path.dirname(__file__),
+    #     '.',
+    #     'file.wav'
+    # )
+    # with io.open(file_name, "rb") as audio_file:
+    #     content = audio_file.read()
+    #
+    # audio = {"content": content}
+    #
+    # response = client.recognize(config, audio)
+    # texts = ""
+    # for result in response.results:
+    #     # First alternative is the most probable result
+    #     texts = result.alternatives[0]
+    #     #print(u"Transcript: {}".format(alternative.transcript))
 
-    audio = {"content": content}
 
-    response = client.recognize(config, audio)
-    texts = ""
-    for result in response.results:
-        # First alternative is the most probable result
-        texts = result.alternatives[0]
-        #print(u"Transcript: {}".format(alternative.transcript))
-
-
-    #texts = ["선박명 온두리호 총톤수는 육백삼십이톤이며 이천이십년 팔월 십오일 십삼시 오십분에 울산 외항으로 입항할 예정이다"]
-    texts = [pm.normalize(text, english=False, number=False) for text in texts]
+    texts = ["선박명 온두리호 총톤수는 육백삼십이톤이며 이천이십년 팔월 십오일 십삼시 오십분에 울산 외항으로 입항할 예정이다"]
+    #texts = [pm.normalize(text, english=False, number=False) for text in texts]
     # texts 전처리 영어 미포함, 숫자 미포함 설정
 
     keywords = pm.krWordRankFunc(texts);
@@ -70,7 +70,7 @@ def sample_recognize():
     # json file write
 
     #print(texts)
-    print(pm.answerDic)
+    print(pm.answerDic[sys.argv[1]], pm.answerDic[sys.argv[2]], pm.answerDic[sys.argv[3]], pm.answerDic[sys.argv[4]], pm.answerDic[sys.argv[5]], pm.answerDic[sys.argv[6]])
 
 
 sample_recognize()

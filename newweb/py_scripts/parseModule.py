@@ -119,7 +119,7 @@ def findShipWeight(keywords):  # 총톤수 확인
                         temp = change
             if temp != 0: ans += temp
             if ans != 0:
-                answerDic['총톤수'] = str(ans) + '톤';
+                answerDic['총톤수'] = ans;
 
 def __main__():
     #texts = ["선박명 온두리호 총톤수는 육백삼십이톤이며 이천이십년 팔월 십오일 십삼시 오십분에 울산 외항으로 입항할 예정이다"]
@@ -136,5 +136,5 @@ def __main__():
     findShipWeight(keywords)  # 총톤수 추출함수
     print(answerDic)
 
-if __name__ == '__main__':
-    __main__()
+#if __name__ == '__main__':
+#    __main__()
