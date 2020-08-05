@@ -30,6 +30,8 @@ module.exports = function () {
     
     });
 
+    
+
     route.post('/inquire',function(req,res){
         var sql = 'SELECT * FROM record';
 
@@ -51,7 +53,6 @@ module.exports = function () {
                 var dbArray=curRow.date.split('-'); // DB값
                 var inputArray=input.startdate.split('-'); // 조회입력값
 
-               // 2020- 05-06 , 2020-05-12
 
                for(var i=0;i<inputArray.length;i++){
                    if(inputArray[i]<dbArray[i])
@@ -148,8 +149,6 @@ module.exports = function () {
             if(input.endhour){
                 results=results.filter(hourSmallerCheck);
             }
-
-        
            res.render('inquire',{results : results});   
         });
 
