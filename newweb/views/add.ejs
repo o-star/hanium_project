@@ -8,7 +8,17 @@
 
 <script src="./js/jquery.min.js"></script>
 <script type="text/javascript" src="./views/partials/file.js"></script>
-
+<script>
+    function btn1_toggle(){
+        document.getElementById('btn1').disabled=true;
+        document.getElementById('btn2').disabled=false;
+    }
+    function btn2_toggle(){
+        document.getElementById('btn1').disabled=false;
+        document.getElementById('btn2').disabled=true;
+        alert("녹음이 완료되었습니다.");
+    }
+</script>
 <!-- HOME -->
 <section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');"
   id="home-section">
@@ -34,11 +44,10 @@
     </div>
 
     <div>
-      <div class="text-center">
-        <input type="button" name="record" value="record" />
-        <input type="button" name="stop" value="stop" />
-      </div>
-      <p></p>
+      <input id="btn1" type="button" style = "background-color: red; border:none; margin-right: 10px; font-weight:bold"
+          onclick="location.href='recorder/start'; btn1_toggle();" value = "record">
+      <input id="btn2" type="button" style = "background-color: red; border:none; margin-right: 10px; font-weight:bold"
+          onclick="location.href='recorder/end'; btn2_toggle();" value = "stop" disabled>
     </div>
 
     <table class="text-center table-class" style="width: 100%">
