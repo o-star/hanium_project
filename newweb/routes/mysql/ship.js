@@ -1,6 +1,7 @@
 module.exports = function () {
     var route = require('express').Router();
     var conn = require('../../config/mysql/db')();
+    var rec = require('../../audio_record/record-to-file');
     var bodyParser = require('body-parser');
     const { PythonShell } = require("python-shell");
     const path = require('path');
@@ -27,16 +28,16 @@ module.exports = function () {
             }
             res.render('inquire',{results :results});
         });
-    
+
     });
 
-    
+
 
     route.post('/inquire',function(req,res){
         var sql = 'SELECT * FROM record';
 
         var input={
-        
+
             shipname:req.body.shipName,
             entry:req.body.portEntry,
              startdate:req.body.startDate,
@@ -46,7 +47,7 @@ module.exports = function () {
         };
 
         conn.query(sql,function(err,fields){
-            
+
             var results=fields;
 
             function dateBiggerCheck(curRow){
@@ -63,16 +64,16 @@ module.exports = function () {
                         return false;
                }
                 return true;
-            
+
               }
-            
-            
-            
+
+
+
             function dateSmallerCheck(curRow){
-               
-                var dbArray=curRow.date.split('-'); 
-                var inputArray=input.enddate.split('-'); 
-                
+
+                var dbArray=curRow.date.split('-');
+                var inputArray=input.enddate.split('-');
+
                 for(var i=0;i<inputArray.length;i++){
                     if(inputArray[i]>dbArray[i])
                          return true;
@@ -83,10 +84,10 @@ module.exports = function () {
                 }
 
                 return true;
-            
+
             }
 
-                
+
 
             function hourBiggerCheck(curRow){
                 var dbArray=curRow.time.split(':');
@@ -101,7 +102,7 @@ module.exports = function () {
                          return false;
                 }
                  return true;
-                
+
             }
 
             function hourSmallerCheck(curRow){
@@ -120,7 +121,7 @@ module.exports = function () {
 
                 return true;
             }
-            
+
 
             if(input.shipname){
                 results=results.filter(function(curRow){
@@ -137,7 +138,7 @@ module.exports = function () {
             if(input.startdate){
                 results=results.filter(dateBiggerCheck);
             }
-        
+
             if(input.starthour){
                 results=results.filter(hourBiggerCheck);
             }
@@ -149,20 +150,34 @@ module.exports = function () {
             if(input.endhour){
                 results=results.filter(hourSmallerCheck);
             }
-           res.render('inquire',{results : results});   
+           res.render('inquire',{results : results});
         });
 
     });
-    route.get('/record', function(req, res){
-        console.log("test" + pypath);
+
+    route.get('/recorder/:status', function (req, res){
+        var status = req.params.status;
+        if(status == 'start') {
+            rec.startRec();
+            console.log("executing");
+        } else {
+            rec.endRec();
+            var fileName = rec.fileName;
+            console.log("Created file name : " + fileName);
+            res.redirect(`/record/${fileName}`);
+        }
+    })
+    route.get('/record/:file', function(req, res){
+        var fileName = req.params.file;
+        options.args.push(fileName);
         PythonShell.run("stt-parse.py", options, function(err, data){
             if(err) throw err;
             //res.status(200).json({data: JSON.parse(data), success: true});
             var value = data[3].split(' ');
             var sql =
-                ` 
-                INSERT INTO temp (ship_name, weight_ton, ship_direction, port_position, date, time) 
-                VALUES ("${value[0]}", ${value[1]}, "${value[2]}", "${value[3]}", "${value[4]}", "${value[5]}"); 
+                `
+                INSERT INTO temp (ship_name, weight_ton, ship_direction, port_position, date, time)
+                VALUES ("${value[0]}", ${value[1]}, "${value[2]}", "${value[3]}", "${value[4]}", "${value[5]}");
                 `;
 
             console.log(value);
@@ -193,8 +208,8 @@ module.exports = function () {
         var id = req.params.id;
         var sql =
             `
-    INSERT INTO record (ship_name, weight_ton, ship_direction, port_position, date, time) 
-    SELECT ship_name, weight_ton, ship_direction, port_position, date, time 
+    INSERT INTO record (ship_name, weight_ton, ship_direction, port_position, date, time)
+    SELECT ship_name, weight_ton, ship_direction, port_position, date, time
     FROM temp
     WHERE id = ?`
             ;
@@ -232,5 +247,6 @@ module.exports = function () {
     });
     return route;
 }
+
 
 
