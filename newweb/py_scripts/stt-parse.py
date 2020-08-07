@@ -4,10 +4,11 @@ from google.cloud.speech_v1 import enums
 
 import io
 import os
-from . import parseModule as pm
+import parseModule as pm
 import sys
 
 def sample_recognize():
+
     """
     Transcribe a short audio file using synchronous speech recognition
     Args:
@@ -30,7 +31,12 @@ def sample_recognize():
         "sample_rate_hertz": sample_rate_hertz,
         "encoding": encoding,
     }
-    file_name = os.getcwd()+'/../audio_record/example_recordings/' + sys.args[7]
+    file_name = os.path.join(
+        os.getcwd(),
+        'audio_record',
+        'examples-recordings',
+        sys.argv[7]
+    )
 
     with io.open(file_name, "rb") as audio_file:
         content = audio_file.read()
@@ -38,6 +44,7 @@ def sample_recognize():
     audio = {"content": content}
     response = client.recognize(config, audio)
     texts = response.results[0].alternatives[0].transcript
+
     texts = [pm.normalize(text, english=False, number=False) for text in texts]
     # texts 전처리 영어 미포함, 숫자 미포함 설정
 
@@ -48,7 +55,10 @@ def sample_recognize():
     pm.findDate(keywords)  # 날짜 데이터 추출함수
     pm.findTime(keywords)  # 시간 데이터 추출함수
     pm.findShipName(keywords, texts)  # 선박명 추출함수
-    pm.findShipWeight(keywords)  # 총톤수 추출함수
+    pm.findShipWeight(keywords, texts)  # 총톤수 추출함수
+
     print(pm.answerDic[sys.argv[1]], pm.answerDic[sys.argv[2]], pm.answerDic[sys.argv[3]], pm.answerDic[sys.argv[4]], pm.answerDic[sys.argv[5]], pm.answerDic[sys.argv[6]])
 
 sample_recognize()
+
+#"선박명 정석호 총톤수는 삼백삼십이톤이며 이천이십년 팔월 칠일 십구시 오십분에 울산 외항으로 출항할 예정이다"
