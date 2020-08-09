@@ -173,7 +173,8 @@ module.exports = function () {
         PythonShell.run("stt-parse.py", options, function(err, data){
             if(err) throw err;
             //res.status(200).json({data: JSON.parse(data), success: true});
-            var value = data[3].split(' ');
+            var value = data[1].split(' ');
+            console.log(value);
             var sql =
                 `
                 INSERT INTO temp (ship_name, weight_ton, ship_direction, port_position, date, time)
@@ -246,7 +247,3 @@ module.exports = function () {
         });
     });
     return route;
-}
-
-
-

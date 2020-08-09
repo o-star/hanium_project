@@ -1,20 +1,12 @@
-from krwordrank.hangle import normalize
-from krwordrank.word import KRWordRank
-import json
+from soynlp.tokenizer import MaxScoreTokenizer
 
 answerDic = {}
 
-def krWordRankFunc(texts):
-    wordrank_extractor = KRWordRank(
-        min_count=1,  # 단어의 최소 출현 빈도수 (그래프 생성 시)
-        max_length=10,  # 단어의 최대 길이
-        verbose=True
-    )
-
-    beta = 0.85  # PageRank의 decaying factor beta
-    max_iter = 10
-
-    keywords, rank, graph = wordrank_extractor.extract(texts, beta, max_iter)
+def rankFunction(texts):
+    scores = {'선박명': 0.5, '총톤수는': 0.7, '년': 0.5, '월': 0.5, '일': 0.5, '시': 0.5, '분': 0.5, '울산': 0.5, '예정': 0.5}
+    tokenizer = MaxScoreTokenizer(scores=scores)
+    keywords = tokenizer.tokenize(texts)
+    print(keywords)
     return keywords
 
 def findDate(keywords):  # 날짜 확인
@@ -80,31 +72,38 @@ def findHarborLocation(keywords):  # 외항/내항 확인
             break
 
 def findShipName(keywords, texts):  # 선박명 확인
-    splitText = texts[0].split(' ')
-    breakPoint = False
-    for comp in splitText:
-        if breakPoint:
-            break;
-        if '선박명' in comp:
-            breakPoint = True;
-    for name in keywords:
-        if comp in name or name in comp:
-            answerDic['선박명'] = name
-            break
+    for kwidx in range(len(keywords)):
+        if keywords[kwidx] == "선박명":
+            answerDic['선박명'] = keywords[kwidx + 1]
+
+    #answerDic['선박명'] = keywords[1]
+    # splitText = texts[0].split(' ')
+    # breakPoint = False
+    # for comp in splitText:
+    #     if breakPoint:
+    #         break;
+    #     if '선박명' in comp:
+    #         breakPoint = True;
+    # for name in keywords:
+    #     if comp in name or name in comp:
+    #         answerDic['선박명'] = name
+    #         break
 
 
 def findShipWeight(keywords, texts): #총톤수 확인
-    splitText = texts[0].split(' ')
-    splitLen = len(splitText)
-    for comp in keywords:
-        if comp.find('톤') != -1 and comp[0:comp.find('톤') - 1].isdigit():
-            answerDic['총톤수'] = comp
-            break
-        elif comp.isdigit():
-            for i in range(0,splitLen):
-                if comp == splitText[i] and '톤' in splitText[i + 1]:
-                    answerDic['총톤수'] = comp
-                    break
+    for kwidx in range(len(keywords)):
+        if keywords[kwidx] == "톤" :
+            answerDic['총톤수'] = keywords[kwidx - 1]
+    # splitText = texts[0].split(' ')
+    # splitLen = len(splitText)
+    # for comp in keywords:
+    #     if comp.find('톤') != -1 and comp[0:comp.find('톤') - 1].isdigit():
+    #         answerDic['총톤수'] = comp
+    #         break
+    #     elif comp.isdigit():
+    #         for i in range(0,splitLen):
+    #             if comp == splitText[i] and '톤' in splitText[i + 1]:
+    #                 answerDic['총톤수'] = comp
+    #                 break
 
 #texts = ["선박명 온두리호 총톤수는 육백삼십이톤이며 이천이십년 팔월 십오일 십삼시 오십분에 울산 외항으로 입항할 예정이다"]
-
