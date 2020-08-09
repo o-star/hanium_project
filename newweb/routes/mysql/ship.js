@@ -1,11 +1,11 @@
 module.exports = function () {
     var route = require('express').Router();
     var conn = require('../../config/mysql/db')();
-    var rec = require('../../audio_record/record-to-file');
+ //   var rec = require('../../audio_record/record-to-file');
     var bodyParser = require('body-parser');
-    const { PythonShell } = require("python-shell");
+    const {PythonShell} = require("python-shell");
     const path = require('path');
-    const { response } = require("express");
+    const {response} = require("express");
     const pypath = path.join(__dirname, "../../py_scripts");
     let options = {
         scriptPath: pypath,
@@ -13,7 +13,7 @@ module.exports = function () {
     };
 
 
-    route.use(bodyParser.urlencoded({extended : true}));
+    route.use(bodyParser.urlencoded({extended: true}));
 
     route.get('/', function (req, res) {
         res.render('index')
@@ -21,63 +21,61 @@ module.exports = function () {
 
     route.get('/inquire', function (req, res) {
         var sql = 'SELECT * FROM record';
-        conn.query(sql,function(err,results){
-            if(err){
+        conn.query(sql, function (err, results) {
+            if (err) {
                 console.log(err);
                 res.status(500).send("DB Error");
             }
-            res.render('inquire',{results :results});
+            res.render('inquire', {results: results});
         });
 
     });
 
 
-
-    route.post('/inquire',function(req,res){
+    route.post('/inquire', function (req, res) {
         var sql = 'SELECT * FROM record';
 
-        var input={
+        var input = {
 
-            shipname:req.body.shipName,
-            entry:req.body.portEntry,
-             startdate:req.body.startDate,
-            starthour:req.body.startHour,
-            enddate:req.body.endDate,
-            endhour:req.body.endHour
+            shipname: req.body.shipName,
+            entry: req.body.portEntry,
+            startdate: req.body.startDate,
+            starthour: req.body.startHour,
+            enddate: req.body.endDate,
+            endhour: req.body.endHour
         };
 
-        conn.query(sql,function(err,fields){
+        conn.query(sql, function (err, fields) {
 
-            var results=fields;
+            var results = fields;
 
-            function dateBiggerCheck(curRow){
-                var dbArray=curRow.date.split('-'); // DB값
-                var inputArray=input.startdate.split('-'); // 조회입력값
+            function dateBiggerCheck(curRow) {
+                var dbArray = curRow.date.split('-'); // DB값
+                var inputArray = input.startdate.split('-'); // 조회입력값
 
 
-               for(var i=0;i<inputArray.length;i++){
-                   if(inputArray[i]<dbArray[i])
+                for (var i = 0; i < inputArray.length; i++) {
+                    if (inputArray[i] < dbArray[i])
                         return true;
-                    else if(inputArray[i]==dbArray[i])
+                    else if (inputArray[i] == dbArray[i])
                         continue;
                     else
                         return false;
-               }
+                }
                 return true;
 
-              }
+            }
 
 
+            function dateSmallerCheck(curRow) {
 
-            function dateSmallerCheck(curRow){
+                var dbArray = curRow.date.split('-');
+                var inputArray = input.enddate.split('-');
 
-                var dbArray=curRow.date.split('-');
-                var inputArray=input.enddate.split('-');
-
-                for(var i=0;i<inputArray.length;i++){
-                    if(inputArray[i]>dbArray[i])
-                         return true;
-                    else if(inputArray[i]==dbArray[i])
+                for (var i = 0; i < inputArray.length; i++) {
+                    if (inputArray[i] > dbArray[i])
+                        return true;
+                    else if (inputArray[i] == dbArray[i])
                         continue;
                     else
                         return false;
@@ -88,32 +86,31 @@ module.exports = function () {
             }
 
 
+            function hourBiggerCheck(curRow) {
+                var dbArray = curRow.time.split(':');
+                var inputArray = input.starthour.split(':');
 
-            function hourBiggerCheck(curRow){
-                var dbArray=curRow.time.split(':');
-                var inputArray=input.starthour.split(':');
-
-                for(var i=0;i<inputArray.length;i++){
-                    if(inputArray[i]<dbArray[i])
-                         return true;
-                     else if(inputArray[i]==dbArray[i])
-                         continue;
-                     else
-                         return false;
+                for (var i = 0; i < inputArray.length; i++) {
+                    if (inputArray[i] < dbArray[i])
+                        return true;
+                    else if (inputArray[i] == dbArray[i])
+                        continue;
+                    else
+                        return false;
                 }
-                 return true;
+                return true;
 
             }
 
-            function hourSmallerCheck(curRow){
+            function hourSmallerCheck(curRow) {
 
-                var dbArray=curRow.time.split(':');
-                var inputArray=input.endhour.split(':');
+                var dbArray = curRow.time.split(':');
+                var inputArray = input.endhour.split(':');
 
-                for(var i=0;i<inputArray.length;i++){
-                    if(inputArray[i]>dbArray[i])
-                         return true;
-                    else if(inputArray[i]==dbArray[i])
+                for (var i = 0; i < inputArray.length; i++) {
+                    if (inputArray[i] > dbArray[i])
+                        return true;
+                    else if (inputArray[i] == dbArray[i])
                         continue;
                     else
                         return false;
@@ -123,75 +120,64 @@ module.exports = function () {
             }
 
 
-            if(input.shipname){
-                results=results.filter(function(curRow){
-                    return curRow.ship_name==input.shipname;
+            if (input.shipname) {
+                results = results.filter(function (curRow) {
+                    return curRow.ship_name == input.shipname;
                 })
             }
 
-            if(input.entry){
-                results=results.filter(function(curRow){
-                    return curRow.ship_direction==input.entry;
+            if (input.entry) {
+                results = results.filter(function (curRow) {
+                    return curRow.ship_direction == input.entry;
                 })
             }
 
-            if(input.startdate){
-                results=results.filter(dateBiggerCheck);
+            if (input.startdate) {
+                results = results.filter(dateBiggerCheck);
             }
 
-            if(input.starthour){
-                results=results.filter(hourBiggerCheck);
+            if (input.starthour) {
+                results = results.filter(hourBiggerCheck);
             }
 
-            if(input.enddate){
-                results=results.filter(dateSmallerCheck);
+            if (input.enddate) {
+                results = results.filter(dateSmallerCheck);
             }
 
-            if(input.endhour){
-                results=results.filter(hourSmallerCheck);
+            if (input.endhour) {
+                results = results.filter(hourSmallerCheck);
             }
-           res.render('inquire',{results : results});
+            res.render('inquire', {results: results});
         });
 
     });
 
-    route.get('/recorder/:status', function (req, res){
+    route.get('/recorder/:status', function (req, res) {
         var status = req.params.status;
-        if(status == 'start') {
-            rec.startRec();
-            console.log("executing");
-        } else {
-            rec.endRec();
-            var fileName = rec.fileName;
-            console.log("Created file name : " + fileName);
-            res.redirect(`/record/${fileName}`);
-        }
-    })
-    route.get('/record/:file', function(req, res){
-        var fileName = req.params.file;
-        options.args.push(fileName);
-        PythonShell.run("stt-parse.py", options, function(err, data){
-            if(err) throw err;
-            //res.status(200).json({data: JSON.parse(data), success: true});
-            var value = data[1].split(' ');
-            console.log(value);
-            var sql =
-                `
+        if (status == 'start') {
+            PythonShell.run("realtime_recording.py", options, function (err, data) {
+                if (err) throw err;
+                //res.status(200).json({data: JSON.parse(data), success: true});
+                var value = data[1].split(' ') //data[1].split(' ');
+                console.log(value);
+                var sql =
+                    `
                 INSERT INTO temp (ship_name, weight_ton, ship_direction, port_position, date, time)
                 VALUES ("${value[0]}", ${value[1]}, "${value[2]}", "${value[3]}", "${value[4]}", "${value[5]}");
                 `;
 
-            console.log(value);
-            conn.query(sql, function (err, result) {
-            if (err) {
-                console.log(err);
-                res.status(500).send('Internal Server Error');
-            }   else{
-                console.log("Number of records inserted: " + result.rowsAffected);
-                res.redirect('/add');
-            }
-            });
+                console.log(value);
+                conn.query(sql, function (err, result) {
+                    if (err) {
+                        console.log(err);
+                        res.status(500).send('Internal Server Error');
+                    } else {
+                        console.log("Number of records inserted: " + result.rowsAffected);
+                        res.redirect('/add');
+                    }
+                });
         });
+        }
     })
 
     route.get('/add', function (req, res) {
@@ -201,19 +187,19 @@ module.exports = function () {
                 console.log(err);
                 res.status(500).send('Internal Server Error');
             }
-            res.render('add', { records: records });
+            res.render('add', {records: records});
         });
     });
 
     route.get('/add/:id', function (req, res) {
         var id = req.params.id;
         var sql =
-            `
+                `
     INSERT INTO record (ship_name, weight_ton, ship_direction, port_position, date, time)
     SELECT ship_name, weight_ton, ship_direction, port_position, date, time
     FROM temp
     WHERE id = ?`
-            ;
+        ;
 
         conn.query(sql, [id], function (err, rows, fields) {
             if (err) {
@@ -246,4 +232,6 @@ module.exports = function () {
             }
         });
     });
+
     return route;
+}
