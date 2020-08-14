@@ -1,3 +1,4 @@
 newweb/node_modules/
 newweb/package-lock.json
 venv
+.idea
