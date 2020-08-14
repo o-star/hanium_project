@@ -7,7 +7,6 @@
 <%- include('./partials/navybar.ejs')%>
 
 <script src="./js/jquery.min.js"></script>
-<script type="text/javascript" src="./views/partials/file.js"></script>
 <script>
     function btn1_toggle(){
         document.getElementById('btn1').disabled=true;
@@ -74,7 +73,7 @@
       <td style="width:16%" class="check-class">
         <div>
           <% var newname = 'check'+i %>
-          <input type="button" style = "background-color: red; border:none; margin-right: 10px; font-weight:bold" 
+          <input type="button" style = "background-color: crimson; border:none; margin-right: 10px; font-weight:bold" 
           onclick="location.href='add/<%-records[i].id%>';" value = "승인">
           <input type="button" style = "background-color: greenyellow; border:none; font-weight:bold" 
           onclick="location.href='delete/<%-records[i].id%>';" value = "삭제">
