@@ -1,8 +1,6 @@
 <!doctype html>
 <html lang="en">
 
-<% var resultCnt=Object.keys(results).length;%>
-
 <%- include('./partials/head.ejs')%>
 
 <!-- NAVBAR -->
@@ -30,8 +28,8 @@
             <div class="col-12 col-sm-3 col-md-2 mb-2">
               <select class="selectpicker" data-style="btn-white btn-lg" data-width="100%" name="portEntry"
                 data-live-search="true" title="입항/출항 선택">
-                <option>입항여부</option>
-                <option>출항여부</option>
+                <option>입항</option>
+                <option>출항</option>
               </select>
             </div>
             <div class="col-12 col-sm-3 col-md-2 mb-2">
@@ -64,13 +62,12 @@
 
 <section class="site-section" id="next">
   <div class="container">
-
     <div class="row mb-5 justify-content-center">
-      <div class="col-md-7 text-center">
-        <h2 class="section-title mb-2"><%=resultCnt+" Search listed "%></h2>
+      <div class="col-md-12 text-center">
+        <h2 class="section-title mb-3"><%=resultCnt+" Search listed "%></h2>
       </div>
     </div>
-
+   
     <table class="text-center table-class" style="width: 100%">
       <tr style="height: 50px; font-weight: bold; font-size:15px; border:black solid">
         <td style="width:14%">선박명</td>
@@ -81,43 +78,23 @@
         <td style="width:14%">시 간</td>
       </tr>
 
-
-      
-
       <%
       for(i=0;i<resultCnt;i++) { %>
       <tr class="tr-class">
-      <td style="width:14%" class="td-class"><%- results[i].ship_name %></td>
-      <td style="width:14%" class="td-class"><%- results[i].weight_ton %></td>
-      <td style="width:14%" class="td-class"><%- results[i].ship_direction %></td>
-      <td style="width:14%" class="td-class"><%- results[i].port_position %></td>
-      <td style="width:14%" class="td-class"><%- results[i].date %></td>
-      <td style="width:14%" class="td-class"><%- results[i].time %></td>
+        <td style="width:14%" class="td-class"><%- results[i].ship_name %></td>
+        <td style="width:14%" class="td-class"><%- results[i].weight_ton %></td>
+        <td style="width:14%" class="td-class"><%- results[i].ship_direction %></td>
+        <td style="width:14%" class="td-class"><%- results[i].port_position %></td>
+        <td style="width:14%" class="td-class"><%- results[i].date %></td>
+        <td style="width:14%" class="td-class"><%- results[i].time %></td>
       </tr>
       <%}%>
     </table>
     <p></p>
-    <div class="row pagination-wrap">
-      <div class="col-md-6 text-center text-md-left mb-4 mb-md-0">
-        <span>Showing 1-7 Of 43,167 Jobs</span>
-      </div>
-      <div class="col-md-6 text-center text-md-right">
-        <div class="custom-pagination ml-auto">
-          <a href="#" class="prev">Prev</a>
-          <div class="d-inline-block">
-            <a href="#" class="active">1</a>
-            <a href="#">2</a>
-            <a href="#">3</a>
-            <a href="#">4</a>
-          </div>
-          <a href="#" class="next">Next</a>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
 <%- include('./partials/footer.ejs')%>
-</body>
+      </body>
 
 </html>
