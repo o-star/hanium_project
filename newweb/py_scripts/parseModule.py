@@ -53,20 +53,20 @@ def findTime(keywords):  # 시간 확인
 
 def findInOut(keywords):  # 입/출항 확인
     for i in keywords:
-        if '입항' in i:
+        if '입항' in i or '이팡' in i:
             answerDic['입/출항'] = '입항'
             break
-        elif '출항' in i:
+        elif '출항' in i or '추랑' in i:
             answerDic['입/출항'] = '출항'
             break
 
 
 def findHarborLocation(keywords):  # 외항/내항 확인
     for i in keywords:
-        if '외항' in i:
+        if '외항' in i or '웨항' in i or '왜항' in i:
             answerDic['외/내항'] = '외항'
             break
-        elif '내항' in i:
+        elif '내항' in i or '네항' in i:
             answerDic['외/내항'] = '내항'
             break
 
