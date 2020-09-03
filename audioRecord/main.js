@@ -3,10 +3,11 @@ var app = express();
 
 app.set('views', './views');
 app.set('view engine', 'ejs');
-app.get('/', function(req, res){
-	res.render('simpleExport');
+app.use(express.static(__dirname));
+app.get('/', (req, res)=>{
+    res.render('simpleExport');
 });
 
-app.listen(3000, function(){
-	console.log("connected 3000");
-});
+app.listen(3000, ()=>{
+    console.log("connected 3000");
+})
