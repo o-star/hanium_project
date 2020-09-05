@@ -227,10 +227,16 @@ module.exports = function () {
                         console.log(err);
                         res.status(500).send('Internal Server Error');
                     } else {
-                        res.redirect('/add');
+			var status = {
+				"status":200,
+				"message":'login success'
+			}
+			res.end(JSON.stringify(status));
+                        //res.redirect('/add');
                     }
                 });
             }
+	
         });
 
 

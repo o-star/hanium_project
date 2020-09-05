@@ -63,7 +63,13 @@
             data: formData,
             processData: false,
             contentType: false,
-            dataType: "script"
+            dataType: "script",
+	    success: function(data){
+		var data =JSON.parse(data);
+		    if(data.status=='200'){
+			window.location.reload();
+		    }
+	    }
             }).done(function(data){
                 console.log(data);
             });
@@ -92,6 +98,7 @@
     <div class="row mb-5 justify-content-center">
       <div class="col-md-7 text-center">
         <h2 class="section-title mb-2">관제 정보 추가</h2>
+        <h2 class="section-title mb-2">대본: 이름은 현수호 무게 632톤 2020년 8월 1일 9시 15분에 울산 외항으로 입항할 예정이다</h2>
       </div>
     </div>
 
