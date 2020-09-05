@@ -2,6 +2,9 @@ module.exports = function () {
     var route = require('express').Router();
     var conn = require('../../config/mysql/db')();
     var bodyParser = require('body-parser');
+    const fs = require('fs');
+    const multer = require('multer');
+    const upload = multer();
     const { PythonShell } = require("python-shell");
     const path = require('path');
     const { response } = require("express");
@@ -195,40 +198,42 @@ module.exports = function () {
         });
 
     });
+    route.post('/add', upload.single('soundBlob'), (req, res) => {
+        var fileName = "result.wav";
+        console.log(req.file); // see what got uploaded
+        let uploadLocation = __dirname + "/../../audio_record/" + fileName // where to save the file to. make sure the incoming name has a .wav extension
+        fs.writeFileSync(uploadLocation, Buffer.from(new Uint8Array(req.file.buffer))); // write the blob to the server as a file
 
-    route.get('/recorder/:status', function (req, res) {
         var status = req.params.status;
-        if (status == 'start') {
-            PythonShell.run("realtime_recording.py", options, function (err, data) {
-                if (err) {
-                    console.log('여기서 에러터짐!!');
-                    throw err;
-                }
-                //res.status(200).json({data: JSON.parse(data), success: true});
-                else {
-                    var value = data[0].split(' ');
 
-                    console.log('음성 데이터 들어온 것' + value);
-                    console.log(value);
+        PythonShell.run("stt-parse.py", options, function (err, data) {
+            if (err) {
+                throw err;
+            }
+            //res.status(200).json({data: JSON.parse(data), success: true});
+            else {
+                var value = data[0].split(' ');
 
-                    var sql =
-                        `
+                console.log('음성 데이터 들어온 것' + value);
+
+                var sql =
+                    `
                 INSERT INTO temp (ship_name, weight_ton, ship_direction, port_position, date, time)
                 VALUES ("${value[0]}", ${value[1]}, "${value[2]}", "${value[3]}", "${value[4]}", "${value[5]}");
                 `;
 
-                    console.log(value);
-                    conn.query(sql, function (err, result) {
-                        if (err) {
-                            console.log(err);
-                            res.status(500).send('Internal Server Error');
-                        } else {
-                            res.redirect('/add');
-                        }
-                    });
-                }
-            });
-        }
+                conn.query(sql, function (err, result) {
+                    if (err) {
+                        console.log(err);
+                        res.status(500).send('Internal Server Error');
+                    } else {
+                        res.redirect('/add');
+                    }
+                });
+            }
+        });
+
+
     })
 
     route.get('/add', function (req, res) {

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from google.cloud import speech_v1
 
 from google.cloud.speech_v1 import enums
@@ -21,7 +22,7 @@ def sample_recognize():
     language_code = "ko_KR"
     # Sample rate in Hertz of the audio data sent
 
-    sample_rate_hertz = 16000 #44100 #16000
+    sample_rate_hertz = 48000 #16000 #44100 #16000
     # Encoding of audio data sent. This sample sets this explicitly.
     # This field is optional for FLAC and WAV audio formats.
 
@@ -34,8 +35,7 @@ def sample_recognize():
     file_name = os.path.join(
         os.getcwd(),
         'audio_record',
-        'examples-recordings',
-        sys.argv[7]#'wyhg.wav' #sys.argv[7] #'fzac.wav'#sys.argv[7] nhuy.wav
+        "result.wav" #sys.argv[7]#'wyhg.wav' #sys.argv[7] #'fzac.wav'#sys.argv[7] nhuy.wav
     )
 
     with io.open(file_name, "rb") as audio_file:

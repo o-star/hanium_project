@@ -1,6 +1,6 @@
 from soynlp.tokenizer import MaxScoreTokenizer
 
-answerDic = {}
+answerDic = {'선박명':'', '총톤수':'', '입/출항':'', '외/내항':'', '날짜':'', '시간':''}
 
 def rankFunction(texts):
     scores = {'선박명': 0.5, '총톤수는': 0.7, '년': 0.5, '월': 0.5, '일': 0.5, '시': 0.5, '분': 0.5, '울산': 0.5, '예정': 0.5}

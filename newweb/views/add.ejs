@@ -6,16 +6,69 @@
 <!-- NAVBAR -->
 <%- include('./partials/navybar.ejs')%>
 
+<script src="./js/recorder.js"></script>
 <script src="./js/jquery.min.js"></script>
 <script>
+    var audio_context;
+    var recorder;
+
+    function startUserMedia(stream) {
+      var input = audio_context.createMediaStreamSource(stream);
+      recorder = new Recorder(input);
+
+    }
+
+    window.onload = function init() {
+      try {
+
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+        window.URL = window.URL || window.webkitURL;
+
+        audio_context = new AudioContext;
+      } catch (e) {
+        alert('No web audio support in this browser!');
+      }
+
+      navigator.getUserMedia({ audio: true }, startUserMedia, function (e) {
+      });
+    }
+
     function btn1_toggle(){
         document.getElementById('btn1').disabled=true;
         document.getElementById('btn2').disabled=false;
+        recorder && recorder.record();
     }
     function btn2_toggle(){
         document.getElementById('btn1').disabled=false;
         document.getElementById('btn2').disabled=true;
+        recorder && recorder.stop();
+
+        postBlob(); // 다운로드 링크 생성
+
+        recorder.clear();
         alert("녹음이 완료되었습니다.");
+    }
+    function postBlob(){
+        recorder && recorder.exportWAV(function (soundBlob) {
+            console.log(soundBlob);
+            var formData = new FormData();
+
+            if (soundBlob) {
+                formData.append("soundBlob", soundBlob);
+
+            $.ajax({
+            type: 'POST',
+            url: '/add',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: "script"
+            }).done(function(data){
+                console.log(data);
+            });
+            }
+        });
     }
 </script>
 <!-- HOME -->
@@ -44,9 +97,9 @@
 
     <div>
       <input id="btn1" type="button" style = "background-color: red; border:none; margin-right: 10px; font-weight:bold"
-          onclick="location.href='recorder/start'; btn1_toggle();" value = "record">
+          onclick="btn1_toggle()" value = "record">
       <input id="btn2" type="button" style = "background-color: red; border:none; margin-right: 10px; font-weight:bold"
-          onclick="location.href='recorder/end'; btn2_toggle();" value = "stop" disabled>
+          onclick="btn2_toggle()" value = "stop" disabled>
     </div>
 
     <table class="text-center table-class" style="width: 100%">
@@ -61,7 +114,7 @@
       </tr>
       <%
       var obj_length = Object.keys(records).length;
-    
+
       for(i=0;i<obj_length;i++) { %>
       <tr class="tr-class">
       <td style="width:14%" class="td-class"><%- records[i].ship_name %></td>
@@ -73,9 +126,9 @@
       <td style="width:16%" class="check-class">
         <div>
           <% var newname = 'check'+i %>
-          <input type="button" style = "background-color: crimson; border:none; margin-right: 10px; font-weight:bold" 
+          <input type="button" style = "background-color: crimson; border:none; margin-right: 10px; font-weight:bold"
           onclick="location.href='add/<%-records[i].id%>';" value = "승인">
-          <input type="button" style = "background-color: greenyellow; border:none; font-weight:bold" 
+          <input type="button" style = "background-color: greenyellow; border:none; font-weight:bold"
           onclick="location.href='delete/<%-records[i].id%>';" value = "삭제">
         </div>
       </td>
