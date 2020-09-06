@@ -27,8 +27,8 @@ INSERT INTO record (ship_name, weight_ton, ship_direction, port_position, date, 
 
 <h4>가상환경 구축 방법</h4>
 1. bash venv_installation.sh <br>
-1. source venv/bin/activate <br>
-1. pip install -r requirements.txt <br>
+2. source venv/bin/activate <br>
+3. pip install -r requirements.txt <br>
 
 ***
 
