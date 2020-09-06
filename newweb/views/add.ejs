@@ -52,6 +52,11 @@
         recorder.clear();
         alert("녹음이 완료되었습니다.");
     }
+
+    function makeStr(){
+
+    }
+    
     function postBlob(){
         recorder && recorder.exportWAV(function (soundBlob) {
             console.log(soundBlob);
@@ -136,12 +141,12 @@
       <td style="width:16%" class="check-class">
         <div>
           <% var newname = 'check'+i %>
-          <input type="button" style = "background-color: crimson; border:none; margin-right: 10px; font-weight:bold"
+          <input type="button" style = "background-color: crimson; border:none; margin-right: 4px; font-weight:bold"
           onclick="location.href='add/<%-records[i].id%>';" value = "승인">
-          <input type="button" style = "background-color: greenyellow; border:none; font-weight:bold"
+          <input type="button" style = "background-color: greenyellow; border:none; margin-right: 4px; font-weight:bold"
           onclick="location.href='delete/<%-records[i].id%>';" value = "삭제">
-	  <input type="button" style = "background-color: skyblue; border:none; font-weight:bold" onclick="location.href='listen/';" value = "듣기">
-	  
+          <input type="button" style = "background-color: skyblue; border:none; font-weight:bold" 
+	onclick="location.href='listen/<%-records[i].id%>';" value = "듣기">
         </div>
       </td>
       </tr>

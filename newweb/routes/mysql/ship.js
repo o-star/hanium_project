@@ -198,6 +198,7 @@ module.exports = function () {
         });
 
     });
+
     route.post('/add', upload.single('soundBlob'), (req, res) => {
         var fileName = "result.wav";
         console.log(req.file); // see what got uploaded
@@ -238,8 +239,6 @@ module.exports = function () {
             }
 	
         });
-
-
     })
 
     route.get('/add', function (req, res) {
@@ -294,6 +293,50 @@ module.exports = function () {
             }
         });
     });
+	
+    route.get('/listen/:id', function (req, res) {
+        var id = req.params.id;
+        sql = `SELECT * FROM temp WHERE id=?`;
+
+        conn.query(sql, [id], function (err, rows, fields) {
+            if (err) {
+                console.log(err);
+                res.status(500).send('Internal Server Error');
+            } else {
+		var transcript = "선박명은 " + rows[0]['ship_name'] + ", 톤수는 " +rows[0]['weight_ton']+ ", " +rows[0]['ship_direction'] + ", " +rows[0]['port_position'] + ", 날짜는 " + rows[0]['date'] + ", 시간은 " + rows[0]['time'];
+		
+		var tts_path = "/home/ubuntu/hanium_project/newweb/py_scripts/";
+		console.log(tts_path);
+		var arg = {
+			scriptPath: tts_path,
+			args: [transcript]
+		};
+		console.log(transcript);
+		PythonShell.run("tts.py", arg, function (err, data) {
+			if(err){
+				throw err;
+			}
+			else
+			{
+				console.log(data);
+				/*
+				const soundObject = new Audio.Sound();
+				try {
+				  await soundObject.loadAsync(require('../../py_scrips/hello.mp3'));
+				  await soundObject.playAsync();
+				  // Your sound is playing!
+				} catch (error) {
+				}*/
+
+				res.redirect('/add');
+			}
+		});
+            }
+        });
+    });
+
+
+
 
     return route;
 }
