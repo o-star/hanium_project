@@ -12,6 +12,14 @@
     var audio_context;
     var recorder;
 
+
+    function startMp3(id){
+
+	    var audio = new Audio("./py_scripts/audioFile/result"+id+".mp3");
+	    audio.play();
+	    console.log("end");
+    }
+
     function startUserMedia(stream) {
       var input = audio_context.createMediaStreamSource(stream);
       recorder = new Recorder(input);
@@ -145,8 +153,9 @@
           onclick="location.href='add/<%-records[i].id%>';" value = "승인">
           <input type="button" style = "background-color: greenyellow; border:none; margin-right: 4px; font-weight:bold"
           onclick="location.href='delete/<%-records[i].id%>';" value = "삭제">
-          <input type="button" style = "background-color: skyblue; border:none; font-weight:bold" 
-	onclick="location.href='listen/<%-records[i].id%>';" value = "듣기">
+	  <input type="button" style = "background-color: skyblue; border:none; font-weight:bold" 
+	  onclick="startMp3(<%-records[i].id%>)"; value = "듣기">
+	   <!--"location.href='listen/<%-records[i].id%>-->
         </div>
       </td>
       </tr>

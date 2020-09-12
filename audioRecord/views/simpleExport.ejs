@@ -16,13 +16,21 @@
   <h1>한이음 공대구호관 Html5 녹음기능</h1>
   <button onclick="startRecording(this);">record</button>
   <button onclick="stopRecording(this);" disabled>stop</button>
-  
+  <button onclick="startReading(this);">startMp3</button> 
   <h2>Recordings</h2>
   <ul id="recordingslist"></ul>
   
   <script>
   var audio_context;
   var recorder;
+
+  function startReading(button){
+
+	  var audio=new Audio('/audio.mp3');
+	  console.log("__dirname");
+	  audio.play();
+
+  }
 
   function startUserMedia(stream) {
     var input = audio_context.createMediaStreamSource(stream);

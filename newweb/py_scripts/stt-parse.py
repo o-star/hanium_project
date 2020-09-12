@@ -26,8 +26,10 @@ def sample_recognize():
     # Encoding of audio data sent. This sample sets this explicitly.
     # This field is optional for FLAC and WAV audio formats.
 
+    speech_contexts = [{"phrases" : "선박명","boost" : 20.0},{"phrases" : "창묵호","boost" : 20.0}]
     encoding = enums.RecognitionConfig.AudioEncoding.LINEAR16
     config = {
+        "speech_contexts" : speech_contexts,
         "language_code": language_code,
         "sample_rate_hertz": sample_rate_hertz,
         "encoding": encoding,
@@ -44,8 +46,11 @@ def sample_recognize():
     audio = {"content": content}
     response = client.recognize(config, audio)
     texts = response.results[0].alternatives[0].transcript
+
+    with open("temp_result.txt", "w") as f:
+        f.write(texts)
+
     keywords = pm.rankFunction(texts)
-    #print(texts)
     #texts = "선박명 현수호 총톤수는 632 톤 2020년 8월 1일 9시 15분에 울산 외항으로 입항할 예정이다"
     #texts = [pm.normalize(text, english=False, number=True) for text in texts]
     # texts 전처리 영어 미포함, 숫자 미포함 설정

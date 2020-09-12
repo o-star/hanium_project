@@ -1,3 +1,5 @@
+const e = require('express');
+
 module.exports = function () {
     var route = require('express').Router();
     var conn = require('../../config/mysql/db')();
@@ -9,6 +11,9 @@ module.exports = function () {
     const path = require('path');
     const { response } = require("express");
     const pypath = path.join(__dirname, "../../py_scripts");
+
+    //	const play = require('audio-play');
+    //const load = require('audio-loader');
     let options = {
         scriptPath: pypath,
         args: ["선박명", "총톤수", "입/출항", "외/내항", "날짜", "시간"]
@@ -227,17 +232,49 @@ module.exports = function () {
                     if (err) {
                         console.log(err);
                         res.status(500).send('Internal Server Error');
-                    } else {
-			var status = {
-				"status":200,
-				"message":'login success'
-			}
-			res.end(JSON.stringify(status));
-                        //res.redirect('/add');
+                    } 
+                });
+
+                sql = `SELECT id FROM temp WHERE ship_name='${value[0]}' AND weight_ton=${value[1]}
+                AND ship_direction='${value[2]}' AND port_position='${value[3]}' AND date='${value[4]}' AND time='${value[5]}'`;
+
+                conn.query(sql, function(err, result){
+                    if (err) {
+                        console.log(err);
+                        res.status(500).send('Internal Server Error');
+                    } 
+                    else{
+                        var id = result[0].id;
+                        console.log('result='+result);
+                        console.log('id='+id);
+
+                        var transcript = "선박명은 " + value[0] + ", 톤수는 " + value[1] + ", " + value[2] + ", " + value[3] + ", 날짜는 " + value[4] + ", 시간은 " + value[5];
+
+                        var tts_path = "/home/ubuntu/hanium_project/newweb/py_scripts/";
+                        console.log(tts_path);
+                        var options = {
+                            scriptPath: tts_path,
+                            args: [transcript , id]
+                        };
+                        console.log(transcript);
+                        PythonShell.run("tts.py", options, function (err, data) {
+                            if (err) {
+                                console.log(data);
+                                throw err;
+                            }
+                            else{
+                                console.log(data);
+                                var status = {
+                                    "status": 200,
+                                    "message": 'login success'
+                                }
+                                res.end(JSON.stringify(status));
+                            }
+                        });
                     }
                 });
             }
-	
+
         });
     })
 
@@ -289,11 +326,14 @@ module.exports = function () {
                 console.log(err);
                 res.status(500).send('Internal Server Error');
             } else {
+                fs.unlink('/home/ubuntu/hanium_project/newweb/py_scripts/audioFile/result'+id+'.mp3', (err)=>{
+                    throw err;
+                });
                 res.redirect('/add');
             }
         });
     });
-	
+
     route.get('/listen/:id', function (req, res) {
         var id = req.params.id;
         sql = `SELECT * FROM temp WHERE id=?`;
@@ -303,34 +343,7 @@ module.exports = function () {
                 console.log(err);
                 res.status(500).send('Internal Server Error');
             } else {
-		var transcript = "선박명은 " + rows[0]['ship_name'] + ", 톤수는 " +rows[0]['weight_ton']+ ", " +rows[0]['ship_direction'] + ", " +rows[0]['port_position'] + ", 날짜는 " + rows[0]['date'] + ", 시간은 " + rows[0]['time'];
-		
-		var tts_path = "/home/ubuntu/hanium_project/newweb/py_scripts/";
-		console.log(tts_path);
-		var arg = {
-			scriptPath: tts_path,
-			args: [transcript]
-		};
-		console.log(transcript);
-		PythonShell.run("tts.py", arg, function (err, data) {
-			if(err){
-				throw err;
-			}
-			else
-			{
-				console.log(data);
-				/*
-				const soundObject = new Audio.Sound();
-				try {
-				  await soundObject.loadAsync(require('../../py_scrips/hello.mp3'));
-				  await soundObject.playAsync();
-				  // Your sound is playing!
-				} catch (error) {
-				}*/
 
-				res.redirect('/add');
-			}
-		});
             }
         });
     });
