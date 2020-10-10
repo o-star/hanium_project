@@ -6,7 +6,7 @@ header = {
     "Content-Type" : "application/xml",
     "Authorization" : "KakaoAK a1e32e1055d027ca475ecce06329971a"
 }
-#print(sys.argv[1])
+
 data = "<speak>" + sys.argv[1] + "</speak>"
 print(data)
 response = requests.post(url, headers=header, data=data.encode('utf-8'))
